@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>興嘉國小巡堂紀錄</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16213e;--ink2:#1a2f5a;--gold:#d4a843;--jade:#1b6b45;--jade2:#2d9166;
+  --cream:#faf8f3;--paper:#f2ede3;--paper2:#e8e0d0;--muted:#7a7260;--border:#d5cab8;
+  --admin:#7c3aed;--admin2:#a855f7;--red:#c0392b;--red2:#e74c3c;
+  --orange:#d97706;--green:#15803d;
+  --sh:0 2px 12px rgba(22,33,62,.10);--sh2:0 6px 32px rgba(22,33,62,.15);
+  --sh3:0 12px 48px rgba(22,33,62,.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+
+/* LOGIN */
+#ls{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+#ls::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 20%,rgba(212,168,67,.12),transparent 70%),radial-gradient(ellipse 50% 60% at 75% 80%,rgba(27,107,69,.10),transparent 70%)}
+.lcard{position:relative;width:100%;max-width:420px;background:rgba(255,255,255,.05);border:1px solid rgba(212,168,67,.25);border-radius:18px;padding:44px 36px 36px;backdrop-filter:blur(12px);box-shadow:var(--sh3);animation:fup .5s ease}
+@keyframes fup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.lseal{width:64px;height:64px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.lseal span{font-family:'Noto Serif TC',serif;font-size:.6rem;color:var(--gold);text-align:center;line-height:1.5;letter-spacing:.05em}
+.ltitle{text-align:center;margin-bottom:4px}
+.ltitle h1{font-family:'Noto Serif TC',serif;font-size:clamp(1.2rem,4vw,1.5rem);font-weight:700;color:#fff;letter-spacing:.05em}
+.ltitle p{font-size:.65rem;color:var(--gold);letter-spacing:.15em;font-weight:300;text-transform:uppercase;margin-top:4px}
+.role-wrap{margin:24px 0 14px}
+.role-lbl{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.08em;margin-bottom:9px;text-transform:uppercase}
+.rpills{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.rpill{padding:10px 8px;border:1.5px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-size:.82rem;font-weight:600;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
+.rpill:hover{border-color:rgba(212,168,67,.4);color:rgba(255,255,255,.85)}
+.rpill.active{border-color:var(--gold);background:rgba(212,168,67,.15);color:var(--gold)}
+.pwwrap{position:relative;margin-bottom:14px}
+.pwwrap input{width:100%;padding:13px 44px 13px 16px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.95rem;letter-spacing:.06em;transition:border-color .2s}
+.pwwrap input:focus{outline:none;border-color:var(--gold)}
+.pwwrap input::placeholder{color:rgba(255,255,255,.3);letter-spacing:.03em}
+.eyebtn{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.4);font-size:1rem;padding:0;line-height:1;cursor:pointer}
+.eyebtn:hover{color:var(--gold)}
+.lbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--jade),var(--jade2));border:none;border-radius:8px;color:#fff;font-size:.95rem;font-weight:700;letter-spacing:.05em;transition:all .2s;box-shadow:0 4px 16px rgba(27,107,69,.35)}
+.lbtn:hover{transform:translateY(-1px)}
+.lbtn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.lerr{margin-top:11px;padding:9px 14px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);border-radius:6px;color:#f87171;font-size:.8rem;text-align:center;display:none}
+
+/* APP */
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.show{display:flex}
+header{background:var(--ink);position:sticky;top:0;z-index:100}
+header::after{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.hdi{max-width:1060px;margin:0 auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;height:62px}
+.hdl{display:flex;align-items:center;gap:11px}
+.hdseal{width:38px;height:38px;border:1.5px solid rgba(212,168,67,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdseal span{font-family:'Noto Serif TC',serif;font-size:.46rem;color:var(--gold);text-align:center;line-height:1.4}
+.hdtitle h1{font-family:'Noto Serif TC',serif;font-size:clamp(.9rem,2.5vw,1.15rem);font-weight:700;color:#fff;letter-spacing:.04em;line-height:1.2}
+.hdtitle p{font-size:.58rem;color:var(--gold);letter-spacing:.1em;font-weight:300}
+.hdr{display:flex;align-items:center;gap:8px}
+.hduser{display:flex;align-items:center;gap:7px;padding:5px 12px 5px 8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px}
+.hddot{width:7px;height:7px;border-radius:50%;background:var(--jade2);flex-shrink:0}
+.hddot.admin{background:var(--admin2)}
+.hddot.sign{background:var(--gold)}
+.hdname{font-size:.78rem;color:rgba(255,255,255,.75);font-weight:600}
+.btnout{padding:5px 12px;border:1px solid rgba(255,255,255,.18);border-radius:6px;background:transparent;color:rgba(255,255,255,.5);font-size:.74rem;font-weight:600;transition:all .18s}
+.btnout:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+#mmb{display:none;background:none;border:none;color:rgba(255,255,255,.7);font-size:1.4rem;padding:6px;line-height:1}
+@media(max-width:650px){#mmb{display:block}.hduser{display:none}}
+.navbar{background:var(--ink2);border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
+.navbar::-webkit-scrollbar{display:none}
+.navi{max-width:1060px;margin:0 auto;padding:0 18px;display:flex}
+.ntab{padding:12px 18px;font-size:.83rem;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;letter-spacing:.02em;user-select:none}
+.ntab:hover{color:rgba(255,255,255,.8)}
+.ntab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.ntab.adm{color:rgba(168,85,247,.5)}
+.ntab.adm.active{color:var(--admin2);border-bottom-color:var(--admin2)}
+.amain{flex:1;max-width:1060px;margin:0 auto;width:100%;padding:26px 18px 60px}
+.panel{display:none;animation:fin .25s ease}
+.panel.active{display:block}
+@keyframes fin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.sechd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.sechd h2{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.04em}
+.bgg{background:var(--jade);color:#fff}
+.bgp{background:var(--admin);color:#fff}
+.bggo{background:var(--gold);color:var(--ink)}
+
+/* FORM */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px}
+@media(max-width:600px){.fgrid{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fg.full{grid-column:1/-1}
+.fg>label{font-size:.75rem;font-weight:700;color:var(--ink2);letter-spacing:.05em;text-transform:uppercase}
+.fg>label .req{color:var(--red2);margin-left:2px}
+input[type=date],input[type=text],select,textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:7px;font-size:.88rem;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--jade2);box-shadow:0 0 0 3px rgba(45,145,102,.1)}
+textarea{resize:vertical;min-height:78px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;background:#fff;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;user-select:none}
+.chip:hover{border-color:var(--jade2);color:var(--jade)}
+.chip.on{background:var(--jade);border-color:var(--jade);color:#fff}
+
+/* Location */
+.stabs{display:flex;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:11px}
+.stab{flex:1;padding:9px;text-align:center;font-size:.79rem;font-weight:700;cursor:pointer;background:#fff;color:var(--muted);transition:all .18s;border-right:1px solid var(--border);user-select:none}
+.stab:last-child{border-right:none}
+.stab.active{background:var(--ink2);color:#fff}
+.subc{display:none}
+.subc.active{display:block}
+.grade-section{margin-bottom:14px}
+.grade-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.grade-lbl{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.05em}
+.btn-selall{padding:3px 10px;font-size:.7rem;font-weight:700;border:1px solid var(--border);border-radius:12px;background:#fff;color:var(--muted);cursor:pointer;transition:all .18s}
+.btn-selall:hover{background:var(--jade);color:#fff;border-color:var(--jade)}
+.cbgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px}
+@media(max-width:380px){.cbgrid{grid-template-columns:repeat(auto-fill,minmax(75px,1fr))}}
+.cbi{display:flex;align-items:center;gap:5px;padding:7px 9px;border:1.5px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;transition:all .18s;user-select:none}
+.cbi:hover{border-color:var(--jade2)}
+.cbi.on{border-color:var(--jade);background:rgba(27,107,69,.06)}
+.cbox{width:14px;height:14px;flex-shrink:0;border:1.5px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;background:#fff;transition:all .18s}
+.cbi.on .cbox{background:var(--jade);border-color:var(--jade)}
+.clbl{font-size:.76rem;color:var(--ink);line-height:1.2}
+.area-selall-row{margin-bottom:8px;display:flex;gap:8px;align-items:center}
+
+/* Status tags */
+.strow{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}
+.stlbl{font-size:.75rem;font-weight:700;color:var(--muted);min-width:58px}
+.stags{display:flex;gap:6px;flex-wrap:wrap}
+.stag{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:.77rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;user-select:none}
+.stag.on{background:var(--jade);border-color:var(--jade);color:#fff}
+.stag.on-warn{background:var(--orange);border-color:var(--orange);color:#fff}
+.stag.on-bad{background:var(--red2);border-color:var(--red2);color:#fff}
+
+/* Recorder */
+.recgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.rbtn{padding:10px 9px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:.82rem;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;transition:all .18s;user-select:none}
+.rbtn:hover{border-color:var(--jade2);color:var(--jade)}
+.rbtn.on{background:var(--ink2);border-color:var(--ink2);color:#fff}
+
+/* File upload */
+.fzone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;background:#fff;cursor:pointer;transition:all .2s}
+.fzone:hover{border-color:var(--jade2);background:rgba(27,107,69,.03)}
+.fzone input{display:none}
+.fchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.fchip{display:flex;align-items:center;gap:5px;padding:3px 10px;background:var(--paper2);border-radius:20px;font-size:.72rem;color:var(--ink2)}
+.fchip button{background:none;border:none;cursor:pointer;color:var(--red2);font-size:.7rem;padding:0;line-height:1}
+
+/* Buttons */
+.facts{margin-top:26px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
+.btn{padding:11px 24px;border-radius:8px;font-size:.86rem;font-weight:700;border:none;transition:all .2s;letter-spacing:.03em}
+.btngreen{background:linear-gradient(135deg,var(--jade),var(--jade2));color:#fff;box-shadow:0 3px 12px rgba(27,107,69,.28)}
+.btngreen:hover{transform:translateY(-1px)}
+.btnpurple{background:linear-gradient(135deg,#5b21b6,var(--admin2));color:#fff}
+.btnpurple:hover{transform:translateY(-1px)}
+.btngray{background:var(--paper2);color:var(--muted);border:1px solid var(--border)}
+.btngray:hover{background:var(--border)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+.btnsm{padding:8px 14px;font-size:.79rem;border-radius:6px}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .6s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* Records */
+.listbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.listbar input{flex:1;min-width:150px;max-width:260px;padding:8px 13px;font-size:.84rem}
+.rcard{background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:11px;overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s,transform .2s}
+.rcard:hover{box-shadow:var(--sh2);transform:translateY(-1px)}
+.rchd{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;background:var(--paper);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:7px}
+.rcmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rcdate{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.93rem}
+.rcperiod{padding:2px 9px;border-radius:12px;background:var(--ink2);color:#fff;font-size:.7rem;font-weight:700}
+.rcwho{font-size:.74rem;color:var(--muted)}
+.rcbody{padding:12px 15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
+.rft{font-size:.66rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.rfv{font-size:.81rem;color:var(--ink)}
+.tg{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;background:var(--paper2);color:var(--muted)}
+.rcft{display:flex;align-items:center;justify-content:space-between;padding:8px 15px;border-top:1px solid var(--border);background:var(--paper);flex-wrap:wrap;gap:7px}
+.sigarea{display:flex;gap:9px;flex-wrap:wrap}
+.sigb{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted)}
+.sigdot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0}
+.sigdot.done{background:var(--jade2)}
+.cacts{display:flex;gap:6px}
+.bte,.btd{padding:4px 12px;font-size:.74rem;font-weight:700;border-radius:5px;border:1px solid var(--border);cursor:pointer;transition:all .18s}
+.bte{background:var(--paper2);color:var(--ink2)}
+.bte:hover{background:var(--ink2);color:#fff;border-color:var(--ink2)}
+.btd{background:#fee2e2;color:var(--red2);border-color:#fecaca}
+.btd:hover{background:var(--red2);color:#fff;border-color:var(--red2)}
+.empty{text-align:center;padding:55px 20px;color:var(--muted)}
+.ei{font-size:2.6rem;margin-bottom:10px}
+.pager{display:flex;justify-content:center;gap:6px;margin-top:16px;flex-wrap:wrap}
+.pgb{padding:6px 12px;border:1px solid var(--border);border-radius:5px;background:#fff;font-size:.8rem;cursor:pointer;transition:all .18s}
+.pgb:hover,.pgb.active{background:var(--ink2);color:#fff;border-color:var(--ink2)}
+
+/* Sign */
+.signlist{display:flex;flex-direction:column;gap:9px}
+.signitem{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;background:#fff;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;gap:9px}
+.sname{font-weight:700;font-size:.88rem}
+.ssub{font-size:.76rem;color:var(--muted);margin-top:2px}
+.sstat{font-size:.76rem;color:var(--muted);margin-top:3px}
+.sstat.done{color:var(--jade2);font-weight:700}
+.btnsign{padding:7px 16px;background:var(--jade);color:#fff;border:none;border-radius:6px;font-size:.79rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btnsign:hover{background:var(--jade2)}
+.btnsign:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+
+/* Admin */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:660px){.agrid{grid-template-columns:1fr}}
+.acard{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--sh)}
+.acard.full{grid-column:1/-1}
+.ahd{padding:12px 15px;background:var(--paper);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.ahd h3{font-family:'Noto Serif TC',serif;font-size:.9rem;font-weight:700}
+.abody{padding:15px}
+.tm{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:10px}
+.etag{display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--paper2);border-radius:20px;font-size:.78rem}
+.etag button{background:none;border:none;cursor:pointer;color:var(--red2);font-size:.7rem;padding:0}
+.addrow{display:flex;gap:7px}
+.addrow input{flex:1;padding:7px 11px;font-size:.82rem}
+.btnadd{padding:7px 14px;background:var(--ink2);color:#fff;border:none;border-radius:6px;font-size:.79rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btnadd:hover{background:#243b7a}
+.pwlist{display:flex;flex-direction:column;gap:9px}
+.pwitem{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;flex-wrap:wrap}
+.pwname{font-weight:700;font-size:.82rem;min-width:85px}
+.pwitem input{flex:1;min-width:110px;padding:7px 10px;font-size:.83rem}
+.btnspw{padding:7px 13px;background:var(--admin);color:#fff;border:none;border-radius:6px;font-size:.77rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.btnspw:hover{background:var(--admin2)}
+
+/* Class format settings */
+.classset{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:480px){.classset{grid-template-columns:1fr}}
+.classset-item{display:flex;flex-direction:column;gap:5px}
+.classset-item label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.classset-item input{padding:8px 11px;font-size:.85rem;border:1.5px solid var(--border);border-radius:6px}
+.hint{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+/* Status option manager */
+.status-opt-section{margin-bottom:18px}
+.status-opt-lbl{font-size:.78rem;font-weight:700;color:var(--ink2);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.status-opt-lbl span{font-weight:400;color:var(--muted);font-size:.72rem}
+
+.exprow{display:flex;gap:9px;flex-wrap:wrap}
+.btnexp{padding:10px 18px;border:none;border-radius:7px;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .18s}
+.btncsv{background:var(--jade);color:#fff}
+.btncsv:hover{background:var(--jade2);transform:translateY(-1px)}
+.btnprt{background:var(--ink2);color:#fff}
+.btnprt:hover{background:var(--ink);transform:translateY(-1px)}
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:720px}
+th{padding:8px 11px;background:var(--ink2);color:#fff;font-weight:700;text-align:left;font-size:.7rem;letter-spacing:.04em;white-space:nowrap}
+td{padding:8px 11px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:nth-child(even) td{background:var(--paper)}
+tr:hover td{background:rgba(27,107,69,.04)}
+.tacts{display:flex;gap:5px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+.toast{position:fixed;bottom:22px;right:18px;padding:12px 18px;border-radius:8px;font-size:.83rem;font-weight:600;color:#fff;box-shadow:var(--sh2);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;max-width:290px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:var(--jade)}
+.toast.error{background:var(--red2)}
+.toast.info{background:var(--ink2)}
+@media(max-width:480px){.amain{padding:16px 13px 50px}.btn{padding:10px 16px;font-size:.81rem}.sechd h2{font-size:1rem}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="ls">
+  <div class="lcard">
+    <div class="lseal"><span>興嘉<br>國小</span></div>
+    <div class="ltitle">
+      <h1>興嘉國小巡堂紀錄</h1>
+      <p>Xingjia Elementary · Classroom Walkthrough Log</p>
+    </div>
+    <div class="role-wrap">
+      <div class="role-lbl">選擇身份 / Select Role</div>
+      <div class="rpills">
+        <div class="rpill active" data-r="principal">校長</div>
+        <div class="rpill" data-r="academic">教務主任</div>
+        <div class="rpill" data-r="student">學務主任</div>
+        <div class="rpill" data-r="general">總務主任</div>
+        <div class="rpill" data-r="guidance">輔導主任</div>
+        <div class="rpill" data-r="admin">管理員</div>
+      </div>
+    </div>
+    <div class="pwwrap">
+      <input type="password" id="lpw" placeholder="請輸入密碼" autocomplete="current-password">
+      <button class="eyebtn" id="eyebtn1">👁</button>
+    </div>
+    <button class="lbtn" id="lbtn">登　入</button>
+    <div class="lerr" id="lerr">密碼錯誤，請重試</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="hdi">
+      <div class="hdl">
+        <div class="hdseal"><span>興嘉<br>國小</span></div>
+        <div class="hdtitle">
+          <h1>興嘉國小巡堂紀錄</h1>
+          <p>XINGJIA ELEMENTARY · CLASSROOM WALKTHROUGH LOG</p>
+        </div>
+      </div>
+      <div class="hdr">
+        <div class="hduser">
+          <div class="hddot" id="hdot"></div>
+          <span class="hdname" id="hname">—</span>
+        </div>
+        <button class="btnout" id="logoutbtn">登出</button>
+        <button id="mmb">☰</button>
+      </div>
+    </div>
+  </header>
+  <div class="navbar" id="navbar">
+    <div class="navi">
+      <div class="ntab active" data-tab="form">📝 巡堂資訊</div>
+      <div class="ntab" data-tab="records">📋 巡堂紀錄</div>
+      <div class="ntab" data-tab="sign" id="tsign" style="display:none">🖊 簽章審閱</div>
+      <div class="ntab adm" data-tab="admin" id="tadmin" style="display:none">⚙️ 管理設定</div>
+    </div>
+  </div>
+
+  <main class="amain">
+
+    <!-- FORM PANEL -->
+    <div class="panel active" id="panel-form">
+      <div class="sechd">
+        <h2>📝 巡堂資訊填報</h2>
+        <span class="badge bgg" id="fbadge">新增紀錄</span>
+      </div>
+      <div class="fgrid">
+        <div class="fg">
+          <label>日期 <span class="req">*</span></label>
+          <input type="date" id="fd">
+        </div>
+        <div class="fg">
+          <label>節次（可複選）<span class="req">*</span></label>
+          <div class="chips" id="pchips"></div>
+        </div>
+        <div class="fg full">
+          <label>巡堂記錄者 <span class="req">*</span></label>
+          <div class="recgrid">
+            <div class="rbtn" data-r="校長">校長</div>
+            <div class="rbtn" data-r="教務主任">教務主任</div>
+            <div class="rbtn" data-r="學務主任">學務主任</div>
+            <div class="rbtn" data-r="總務主任">總務主任</div>
+            <div class="rbtn" data-r="輔導主任">輔導主任</div>
+          </div>
+        </div>
+        <div class="fg full">
+          <label>場域 / 班級（可複選）<span class="req">*</span></label>
+          <div class="stabs">
+            <div class="stab active" data-lt="area">🏫 場域</div>
+            <div class="stab" data-lt="cls">📚 班級</div>
+          </div>
+          <div class="subc active" id="lc-area">
+            <div class="area-selall-row">
+              <button class="btn-selall" id="btn-area-all">全選</button>
+              <button class="btn-selall" id="btn-area-none">取消全選</button>
+            </div>
+            <div class="cbgrid" id="agrid"></div>
+          </div>
+          <div class="subc" id="lc-cls">
+            <div id="cgrid"></div>
+          </div>
+        </div>
+
+        <!-- 教師狀況 -->
+        <div class="fg full">
+          <label>教師狀況</label>
+          <div class="strow">
+            <span class="stlbl">教師</span>
+            <div class="stags" id="stt"></div>
+          </div>
+        </div>
+
+        <!-- 學生狀況 -->
+        <div class="fg full">
+          <label>學生狀況</label>
+          <div class="strow">
+            <span class="stlbl">學生</span>
+            <div class="stags" id="sts"></div>
+          </div>
+        </div>
+
+        <!-- 環境設施 -->
+        <div class="fg full">
+          <label>環境設施</label>
+          <div class="strow">
+            <span class="stlbl">環境</span>
+            <div class="stags" id="ste"></div>
+          </div>
+        </div>
+
+        <!-- 整體狀況 -->
+        <div class="fg full">
+          <label>整體狀況</label>
+          <div class="strow">
+            <span class="stlbl">整體</span>
+            <div class="stags" id="stg"></div>
+          </div>
+        </div>
+
+        <div class="fg full">
+          <label>其他備註</label>
+          <textarea id="fnote" placeholder="請輸入備註事項..."></textarea>
+        </div>
+        <div class="fg full">
+          <label>敬會老師回應</label>
+          <textarea id="fresp" placeholder="教師回應內容..."></textarea>
+        </div>
+        <div class="fg full">
+          <label>附件上傳</label>
+          <div class="fzone" id="fzone">
+            <input type="file" id="fattach" multiple accept="image/*,.pdf,.doc,.docx">
+            <div style="font-size:1.3rem;margin-bottom:5px">📎</div>
+            <div style="font-size:.8rem;color:var(--muted)">點擊選擇附件（圖片、PDF、Word）</div>
+          </div>
+          <div class="fchips" id="flist"></div>
+        </div>
+      </div>
+      <div class="facts">
+        <button class="btn btngray" id="bcancel" style="display:none">取消編輯</button>
+        <button class="btn btngreen" id="bsubmit">📩 送出紀錄</button>
+      </div>
+    </div>
+
+    <!-- RECORDS PANEL -->
+    <div class="panel" id="panel-records">
+      <div class="sechd">
+        <h2>📋 巡堂紀錄</h2>
+        <button class="btn btngray btnsm" id="btnrefresh">🔄 重新整理</button>
+      </div>
+      <div class="listbar">
+        <input type="text" id="sq" placeholder="搜尋日期、場域、記錄者...">
+      </div>
+      <div id="rlist"><div class="empty"><div class="ei">⏳</div><p>載入中...</p></div></div>
+      <div class="pager" id="pager"></div>
+    </div>
+
+    <!-- SIGN PANEL -->
+    <div class="panel" id="panel-sign">
+      <div class="sechd">
+        <h2>🖊 簽章審閱</h2>
+        <span class="badge bggo" id="sbadge">—</span>
+      </div>
+      <div class="signlist" id="slist"><div class="empty"><div class="ei">⏳</div><p>載入中...</p></div></div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="panel" id="panel-admin">
+      <div class="sechd">
+        <h2>⚙️ 管理設定</h2>
+        <span class="badge bgp">超級管理員</span>
+      </div>
+      <div class="agrid">
+
+        <!-- 密碼管理 -->
+        <div class="acard full">
+          <div class="ahd"><h3>🔑 密碼管理</h3></div>
+          <div class="abody"><div class="pwlist" id="pwlist"></div></div>
+        </div>
+
+        <!-- 節次設定 -->
+        <div class="acard">
+          <div class="ahd"><h3>🕐 節次設定</h3></div>
+          <div class="abody">
+            <div class="tm" id="pmgr"></div>
+            <div class="addrow">
+              <input type="text" id="newp" placeholder="新節次名稱（例：第7節）">
+              <button class="btnadd" id="btnaddp">+ 新增</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 場域設定 -->
+        <div class="acard">
+          <div class="ahd"><h3>🏫 場域設定</h3></div>
+          <div class="abody">
+            <div class="tm" id="amgr"></div>
+            <div class="addrow">
+              <input type="text" id="newa" placeholder="新場域名稱">
+              <button class="btnadd" id="btnadda">+ 新增</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 班級設定 -->
+        <div class="acard full">
+          <div class="ahd"><h3>📚 班級格式設定</h3></div>
+          <div class="abody">
+            <div class="classset">
+              <div class="classset-item">
+                <label>年級數量</label>
+                <input type="number" id="cfg-grades" min="1" max="12" value="6">
+              </div>
+              <div class="classset-item">
+                <label>每年級班數</label>
+                <input type="number" id="cfg-classes" min="1" max="20" value="8">
+              </div>
+              <div class="classset-item">
+                <label>年級前綴文字</label>
+                <input type="text" id="cfg-grade-prefix" value="" placeholder="例：留空則顯示「1年」">
+              </div>
+              <div class="classset-item">
+                <label>班級後綴文字</label>
+                <input type="text" id="cfg-class-suffix" value="班" placeholder="例：班">
+              </div>
+            </div>
+            <p class="hint">預覽：<strong id="class-preview">1年1班、1年2班 ... 6年8班</strong></p>
+            <div style="margin-top:12px">
+              <button class="btn btngreen btnsm" id="btn-save-class">儲存班級設定</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 狀況選項設定 -->
+        <div class="acard full">
+          <div class="ahd"><h3>📊 狀況選項設定</h3></div>
+          <div class="abody">
+
+            <div class="status-opt-section">
+              <div class="status-opt-lbl">教師狀況選項 <span>（可新增/刪除）</span></div>
+              <div class="tm" id="opt-teacher-mgr"></div>
+              <div class="addrow">
+                <input type="text" id="new-opt-teacher" placeholder="新增選項">
+                <button class="btnadd" id="btn-add-opt-teacher">+ 新增</button>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="status-opt-section">
+              <div class="status-opt-lbl">學生狀況選項 <span>（可新增/刪除）</span></div>
+              <div class="tm" id="opt-student-mgr"></div>
+              <div class="addrow">
+                <input type="text" id="new-opt-student" placeholder="新增選項">
+                <button class="btnadd" id="btn-add-opt-student">+ 新增</button>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="status-opt-section">
+              <div class="status-opt-lbl">環境設施選項 <span>（可新增/刪除）</span></div>
+              <div class="tm" id="opt-env-mgr"></div>
+              <div class="addrow">
+                <input type="text" id="new-opt-env" placeholder="新增選項">
+                <button class="btnadd" id="btn-add-opt-env">+ 新增</button>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="status-opt-section">
+              <div class="status-opt-lbl">整體狀況選項 <span>（可新增/刪除）</span></div>
+              <div class="tm" id="opt-overall-mgr"></div>
+              <div class="addrow">
+                <input type="text" id="new-opt-overall" placeholder="新增選項">
+                <button class="btnadd" id="btn-add-opt-overall">+ 新增</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 匯出 -->
+        <div class="acard full">
+          <div class="ahd"><h3>📤 資料匯出</h3></div>
+          <div class="abody">
+            <div class="exprow">
+              <button class="btnexp btncsv" id="btncsv">📊 匯出 CSV</button>
+              <button class="btnexp btnprt" id="btnprt">🖨️ 列印紀錄</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 所有紀錄 -->
+        <div class="acard full">
+          <div class="ahd"><h3>📋 所有紀錄管理</h3><button class="btn btngray btnsm" id="btnrefresh2">🔄</button></div>
+          <div class="abody">
+            <div class="twrap">
+              <table>
+                <thead><tr>
+                  <th>日期</th><th>節次</th><th>記錄者</th><th>場域/班級</th>
+                  <th>教師</th><th>學生</th><th>環境</th><th>整體</th><th>備註</th><th>操作</th>
+                </tr></thead>
+                <tbody id="atbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+'use strict';
+
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbxZb9Gpk8y8njPax-5apKVAdjk7ZQdun30lLzrxivZb70Golzb3sRt8zT6BLKUcEhir/exec';
+
+var CFG = {
+  periods: ['早自習','第1節','第2節','第3節','第4節','第5節','第6節','午休'],
+  areas: ['教室走廊','操場','圖書館','資訊室','音樂教室','體育館','餐廳','辦公室'],
+  grades: 6,
+  classesPerGrade: 8,
+  gradePrefix: '',
+  classSuffix: '班',
+  statusOpts: {
+    teacher: ['一切良好','大致良好','需改善'],
+    student:  ['一切良好','大致良好','需改善'],
+    env:      ['一切良好','大致良好','需改善'],
+    overall:  ['一切良好','大致良好','需改善']
+  },
+  passwords: {
+    admin:'admin1234', principal:'principal123', academic:'academic123',
+    student:'student123', general:'general123', guidance:'guidance123'
+  }
+};
+
+var RMETA = {
+  admin:     {label:'管理員',   canSign:false, isAdmin:true},
+  principal: {label:'校長',     canSign:true,  isAdmin:false},
+  academic:  {label:'教務主任', canSign:true,  isAdmin:false},
+  student:   {label:'學務主任', canSign:false, isAdmin:false},
+  general:   {label:'總務主任', canSign:false, isAdmin:false},
+  guidance:  {label:'輔導主任', canSign:false, isAdmin:false}
+};
+
+var CU = null, selRole = 'principal';
+var allR = [], filtR = [], pg = 1, PG = 10, editId = null, afiles = [];
+
+/* ---- UTILS ---- */
+function qs(s){ return document.querySelector(s); }
+function qsa(s){ return document.querySelectorAll(s); }
+function el(id){ return document.getElementById(id); }
+function showToast(msg, type){
+  var t = el('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type||'info') + ' show';
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+}
+
+/* ---- CLASS NAME HELPER ---- */
+function className(g, c) {
+  var pre = CFG.gradePrefix || '';
+  var suf = CFG.classSuffix !== undefined ? CFG.classSuffix : '班';
+  return pre + g + '年' + c + suf;
+}
+
+function allClassNames() {
+  var list = [];
+  for (var g = 1; g <= CFG.grades; g++) {
+    for (var c = 1; c <= CFG.classesPerGrade; c++) {
+      list.push(className(g, c));
+    }
+  }
+  return list;
+}
+
+/* ---- LOGIN ---- */
+qsa('.rpill').forEach(function(p){
+  p.addEventListener('click', function(){
+    qsa('.rpill').forEach(function(x){ x.classList.remove('active'); });
+    p.classList.add('active');
+    selRole = p.dataset.r;
+  });
+});
+
+el('eyebtn1').addEventListener('click', function(){
+  var inp = el('lpw');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  el('eyebtn1').textContent = inp.type === 'text' ? '🙈' : '👁';
+});
+el('lpw').addEventListener('keyup', function(e){ if(e.key === 'Enter') doLogin(); });
+el('lbtn').addEventListener('click', doLogin);
+
+function doLogin(){
+  var pw = el('lpw').value;
+  el('lerr').style.display = 'none';
+  if(!pw) return;
+  if(pw !== CFG.passwords[selRole]){
+    el('lerr').style.display = 'block';
+    el('lpw').value = '';
+    return;
+  }
+  CU = Object.assign({key: selRole}, RMETA[selRole]);
+  setupApp();
+  var ls = el('ls');
+  ls.style.transition = 'opacity .3s';
+  ls.style.opacity = '0';
+  setTimeout(function(){
+    ls.style.display = 'none';
+    el('app').classList.add('show');
+  }, 300);
+}
+
+el('logoutbtn').addEventListener('click', function(){
+  CU = null; editId = null;
+  resetForm();
+  el('lpw').value = '';
+  el('lerr').style.display = 'none';
+  var ls = el('ls');
+  ls.style.display = 'flex'; ls.style.opacity = '1';
+  el('app').classList.remove('show');
+});
+
+/* ---- SETUP APP ---- */
+function setupApp(){
+  el('hname').textContent = CU.label;
+  var dot = el('hdot');
+  dot.className = 'hddot' + (CU.isAdmin ? ' admin' : CU.canSign ? ' sign' : '');
+  el('tsign').style.display  = CU.canSign  ? '' : 'none';
+  el('tadmin').style.display = CU.isAdmin  ? '' : 'none';
+  switchTab('form');
+  qsa('.rbtn').forEach(function(b){ b.classList.toggle('on', b.dataset.r === CU.label); });
+  renderPchips();
+  renderStatusTags();
+  renderLocGrids();
+  loadCFG().then(function(){
+    renderPchips();
+    renderStatusTags();
+    renderLocGrids();
+    if(CU.isAdmin) renderAdmin();
+    if(CU.canSign) loadSignR();
+    loadRecords();
+  });
+}
+
+/* ---- NAV ---- */
+qsa('.ntab').forEach(function(t){
+  t.addEventListener('click', function(){ switchTab(t.dataset.tab); });
+});
+function switchTab(id){
+  qsa('.ntab').forEach(function(t){ t.classList.toggle('active', t.dataset.tab === id); });
+  qsa('.panel').forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + id); });
+  if(id === 'records') loadRecords();
+  if(id === 'sign') loadSignR();
+}
+var navOpen = true;
+el('mmb').addEventListener('click', function(){
+  navOpen = !navOpen;
+  el('navbar').style.display = navOpen ? '' : 'none';
+});
+
+/* ---- PERIOD CHIPS ---- */
+function renderPchips(){
+  var w = el('pchips');
+  var sel = Array.from(w.querySelectorAll('.chip.on')).map(function(c){ return c.dataset.v; });
+  w.innerHTML = '';
+  CFG.periods.forEach(function(p){
+    var c = document.createElement('div');
+    c.className = 'chip' + (sel.indexOf(p) >= 0 ? ' on' : '');
+    c.dataset.v = p; c.textContent = p;
+    c.addEventListener('click', function(){ c.classList.toggle('on'); });
+    w.appendChild(c);
+  });
+}
+
+/* ---- RECORDER ---- */
+qsa('.rbtn').forEach(function(b){
+  b.addEventListener('click', function(){
+    qsa('.rbtn').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+  });
+});
+
+/* ---- STATUS TAGS ---- */
+var STATUS_IDS = ['stt','sts','ste','stg'];
+var STATUS_KEYS = ['teacher','student','env','overall'];
+
+function renderStatusTags(){
+  STATUS_IDS.forEach(function(id, i){
+    var key = STATUS_KEYS[i];
+    var opts = (CFG.statusOpts && CFG.statusOpts[key]) ? CFG.statusOpts[key] : ['一切良好','大致良好','需改善'];
+    var wrap = el(id);
+    var curVal = (wrap.querySelector('.stag.on') || wrap.querySelector('.stag.on-warn') || wrap.querySelector('.stag.on-bad'));
+    var cur = curVal ? curVal.dataset.v : '';
+    wrap.innerHTML = '';
+    opts.forEach(function(opt, oi){
+      var t = document.createElement('div');
+      t.className = 'stag' + (cur === opt ? ' ' + getTagClass(oi) : '');
+      t.dataset.v = opt;
+      t.textContent = opt;
+      t.addEventListener('click', function(){
+        wrap.querySelectorAll('.stag').forEach(function(x){ x.className = 'stag'; });
+        t.className = 'stag ' + getTagClass(oi);
+      });
+      wrap.appendChild(t);
+    });
+  });
+}
+
+function getTagClass(idx){
+  if(idx === 0) return 'on';
+  if(idx === 1) return 'on-warn';
+  return 'on-bad';
+}
+
+function getSt(id){
+  var s = el(id).querySelector('.stag.on, .stag.on-warn, .stag.on-bad');
+  return s ? s.dataset.v : '';
+}
+function setSt(id, v){
+  var opts = el(id).querySelectorAll('.stag');
+  opts.forEach(function(t, i){
+    if(t.dataset.v === v){
+      t.className = 'stag ' + getTagClass(i);
+    } else {
+      t.className = 'stag';
+    }
+  });
+}
+
+/* ---- LOCATION GRIDS ---- */
+qsa('.stab').forEach(function(t){
+  t.addEventListener('click', function(){
+    qsa('.stab').forEach(function(x){ x.classList.remove('active'); });
+    qsa('.subc').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    el('lc-' + t.dataset.lt).classList.add('active');
+  });
+});
+
+el('btn-area-all').addEventListener('click', function(){
+  el('agrid').querySelectorAll('.cbi').forEach(function(b){ b.classList.add('on'); });
+});
+el('btn-area-none').addEventListener('click', function(){
+  el('agrid').querySelectorAll('.cbi').forEach(function(b){ b.classList.remove('on'); });
+});
+
+function renderLocGrids(){
+  /* Areas */
+  var ag = el('agrid');
+  var sa = Array.from(ag.querySelectorAll('.cbi.on')).map(function(x){ return x.dataset.v; });
+  ag.innerHTML = '';
+  CFG.areas.forEach(function(a){ ag.appendChild(mkCb(a, sa.indexOf(a) >= 0)); });
+
+  /* Classes grouped by grade */
+  var cg = el('cgrid');
+  var sc = Array.from(cg.querySelectorAll('.cbi.on')).map(function(x){ return x.dataset.v; });
+  cg.innerHTML = '';
+
+  for(var g = 1; g <= CFG.grades; g++){
+    var gsec = document.createElement('div'); gsec.className = 'grade-section';
+    var ghd = document.createElement('div'); ghd.className = 'grade-hd';
+    var glbl = document.createElement('span'); glbl.className = 'grade-lbl';
+    glbl.textContent = (CFG.gradePrefix || '') + g + '年級';
+    var gsel = document.createElement('button'); gsel.className = 'btn-selall';
+    gsel.textContent = '全選此年級';
+    (function(grade, section){
+      gsel.addEventListener('click', function(e){
+        e.preventDefault();
+        section.querySelectorAll('.cbi').forEach(function(b){ b.classList.add('on'); });
+      });
+    })(g, gsec);
+    ghd.appendChild(glbl); ghd.appendChild(gsel); gsec.appendChild(ghd);
+    var gr = document.createElement('div'); gr.className = 'cbgrid';
+    for(var c = 1; c <= CFG.classesPerGrade; c++){
+      var v = className(g, c);
+      gr.appendChild(mkCb(v, sc.indexOf(v) >= 0));
+    }
+    gsec.appendChild(gr);
+    cg.appendChild(gsec);
+  }
+
+  /* 全選/取消 all classes */
+  var allSelRow = document.createElement('div');
+  allSelRow.className = 'area-selall-row';
+  allSelRow.style.marginBottom = '12px';
+  var aall = document.createElement('button'); aall.className = 'btn-selall'; aall.textContent = '全選所有班級';
+  var anone = document.createElement('button'); anone.className = 'btn-selall'; anone.textContent = '取消全選';
+  aall.addEventListener('click', function(){ el('cgrid').querySelectorAll('.cbi').forEach(function(b){ b.classList.add('on'); }); });
+  anone.addEventListener('click', function(){ el('cgrid').querySelectorAll('.cbi').forEach(function(b){ b.classList.remove('on'); }); });
+  allSelRow.appendChild(aall); allSelRow.appendChild(anone);
+  cg.insertBefore(allSelRow, cg.firstChild);
+}
+
+function mkCb(lbl, sel){
+  var e = document.createElement('div');
+  e.className = 'cbi' + (sel ? ' on' : '');
+  e.dataset.v = lbl;
+  var box = document.createElement('div'); box.className = 'cbox'; box.textContent = '✓';
+  var sp = document.createElement('span'); sp.className = 'clbl'; sp.textContent = lbl;
+  e.appendChild(box); e.appendChild(sp);
+  e.addEventListener('click', function(){ e.classList.toggle('on'); });
+  return e;
+}
+
+function getLocs(){
+  return Array.from(document.querySelectorAll('.cbi.on')).map(function(x){ return x.dataset.v; });
+}
+
+/* ---- FILE UPLOAD ---- */
+el('fzone').addEventListener('click', function(){ el('fattach').click(); });
+el('fattach').addEventListener('change', function(){
+  Array.from(el('fattach').files).forEach(function(f){ afiles.push(f); });
+  renderFiles();
+  el('fattach').value = '';
+});
+function renderFiles(){
+  var el2 = el('flist'); el2.innerHTML = '';
+  afiles.forEach(function(f, i){
+    var c = document.createElement('div'); c.className = 'fchip';
+    var txt = document.createTextNode('📄 ' + f.name + ' ');
+    var btn = document.createElement('button'); btn.textContent = '✕';
+    btn.addEventListener('click', function(){ afiles.splice(i, 1); renderFiles(); });
+    c.appendChild(txt); c.appendChild(btn);
+    el2.appendChild(c);
+  });
+}
+
+/* ---- FORM ---- */
+el('bsubmit').addEventListener('click', submitRecord);
+el('bcancel').addEventListener('click', resetForm);
+
+function getFormData(){
+  var date = el('fd').value;
+  var periods = Array.from(qsa('#pchips .chip.on')).map(function(c){ return c.dataset.v; });
+  var rec = qs('.rbtn.on');
+  var locs = getLocs();
+  if(!date)          { showToast('請選擇日期','error'); return null; }
+  if(!periods.length){ showToast('請選擇節次','error'); return null; }
+  if(!rec)           { showToast('請選擇記錄者','error'); return null; }
+  if(!locs.length)   { showToast('請選擇場域或班級','error'); return null; }
+  return {
+    date: date, periods: periods.join('、'), recorder: rec.dataset.r, locations: locs.join('、'),
+    teacherStatus: getSt('stt'), studentStatus: getSt('sts'),
+    envStatus: getSt('ste'), overallStatus: getSt('stg'),
+    note: el('fnote').value.trim(), teacherResponse: el('fresp').value.trim(),
+    principalSigned: '', academicSigned: ''
+  };
+}
+
+function submitRecord(){
+  var data = getFormData(); if(!data) return;
+  var btn = el('bsubmit'); btn.disabled = true;
+  var sp = document.createElement('span'); sp.className = 'spin';
+  btn.innerHTML = ''; btn.appendChild(sp);
+  btn.appendChild(document.createTextNode(editId ? '更新中...' : '送出中...'));
+  if(editId) data.id = editId;
+  gasR(editId ? 'updateRecord' : 'addRecord', data).then(function(r){
+    if(r.success){
+      showToast(editId ? '✅ 更新成功' : '✅ 新增成功','success');
+      resetForm(); loadRecords();
+    } else { showToast('❌ 失敗：' + r.message,'error'); }
+  }).catch(function(){ showToast('⚠️ 連線失敗','error'); })
+  .finally(function(){
+    btn.disabled = false;
+    btn.textContent = editId ? '🔄 更新紀錄' : '📩 送出紀錄';
+  });
+}
+
+function resetForm(){
+  el('fd').value = new Date().toISOString().split('T')[0];
+  qsa('#pchips .chip').forEach(function(c){ c.classList.remove('on'); });
+  qsa('.rbtn').forEach(function(b){ b.classList.toggle('on', CU && b.dataset.r === CU.label); });
+  qsa('.cbi').forEach(function(b){ b.classList.remove('on'); });
+  STATUS_IDS.forEach(function(id){ el(id).querySelectorAll('.stag').forEach(function(t){ t.className = 'stag'; }); });
+  el('fnote').value = ''; el('fresp').value = '';
+  afiles = []; renderFiles();
+  editId = null;
+  el('bsubmit').textContent = '📩 送出紀錄';
+  el('bsubmit').className = 'btn btngreen';
+  el('bcancel').style.display = 'none';
+  el('fbadge').textContent = '新增紀錄'; el('fbadge').className = 'badge bgg';
+}
+
+/* ---- RECORDS ---- */
+el('btnrefresh').addEventListener('click', loadRecords);
+el('sq').addEventListener('input', filterR);
+
+function loadRecords(){
+  var listEl = el('rlist');
+  listEl.innerHTML = '<div class="empty"><div class="ei">⏳</div><p>載入中...</p></div>';
+  gasR('getRecords', {}).then(function(r){
+    allR = r.success ? (r.data || []) : [];
+  }).catch(function(){ allR = []; }).finally(function(){
+    filtR = allR.slice(); pg = 1;
+    renderR();
+    if(CU && CU.isAdmin) renderAdminTable();
+  });
+}
+
+function filterR(){
+  var q = el('sq').value.toLowerCase();
+  filtR = allR.filter(function(r){
+    return [r.date, r.periods, r.recorder, r.locations].some(function(v){
+      return (v||'').toLowerCase().indexOf(q) >= 0;
+    });
+  });
+  pg = 1; renderR();
+}
+
+function renderR(){
+  var listEl = el('rlist');
+  if(!filtR.length){
+    listEl.innerHTML = '<div class="empty"><div class="ei">📭</div><p>暫無符合的紀錄</p></div>';
+    el('pager').innerHTML = ''; return;
+  }
+  listEl.innerHTML = '';
+  filtR.slice((pg-1)*PG, pg*PG).forEach(function(r){ listEl.appendChild(mkCard(r)); });
+  renderPager();
+}
+
+function tgHtml(v){
+  if(!v) return '<span class="tg">—</span>';
+  return '<span class="tg">' + v + '</span>';
+}
+
+function mkCard(r){
+  var div = document.createElement('div'); div.className = 'rcard';
+  var canEdit = CU && CU.isAdmin;
+  var ps = r.principalSigned; var as2 = r.academicSigned;
+  div.innerHTML =
+    '<div class="rchd"><div class="rcmeta">' +
+      '<span class="rcdate">' + (r.date||'') + '</span>' +
+      (r.periods ? '<span class="rcperiod">' + r.periods + '</span>' : '') +
+      '<span class="rcwho">🖊 ' + (r.recorder||'') + '</span>' +
+    '</div></div>' +
+    '<div class="rcbody">' +
+      '<div><div class="rft">場域/班級</div><div class="rfv">' + (r.locations||'—') + '</div></div>' +
+      '<div><div class="rft">教師狀況</div><div class="rfv">' + tgHtml(r.teacherStatus) + '</div></div>' +
+      '<div><div class="rft">學生狀況</div><div class="rfv">' + tgHtml(r.studentStatus) + '</div></div>' +
+      '<div><div class="rft">環境設施</div><div class="rfv">' + tgHtml(r.envStatus) + '</div></div>' +
+      '<div><div class="rft">整體狀況</div><div class="rfv">' + tgHtml(r.overallStatus) + '</div></div>' +
+      (r.note ? '<div><div class="rft">備註</div><div class="rfv">' + r.note + '</div></div>' : '') +
+      (r.teacherResponse ? '<div><div class="rft">教師回應</div><div class="rfv">' + r.teacherResponse + '</div></div>' : '') +
+    '</div>' +
+    '<div class="rcft">' +
+      '<div class="sigarea">' +
+        '<div class="sigb"><div class="sigdot ' + (ps?'done':'') + '"></div>' + (ps||'校長未簽') + '</div>' +
+        '<div class="sigb"><div class="sigdot ' + (as2?'done':'') + '"></div>' + (as2||'教務未簽') + '</div>' +
+      '</div>' +
+      '<div class="cacts">' +
+        (canEdit ? '<button class="bte">編輯</button><button class="btd">刪除</button>' : '') +
+      '</div>' +
+    '</div>';
+  if(canEdit){
+    div.querySelector('.bte').addEventListener('click', function(){ editR(r.id); });
+    div.querySelector('.btd').addEventListener('click', function(){ delR(r.id); });
+  }
+  return div;
+}
+
+function renderPager(){
+  var tot = Math.ceil(filtR.length/PG), p = el('pager');
+  if(tot <= 1){ p.innerHTML = ''; return; }
+  p.innerHTML = '';
+  for(var i = 1; i <= tot; i++){
+    var b = document.createElement('button');
+    b.className = 'pgb' + (i === pg ? ' active' : '');
+    b.textContent = i;
+    (function(idx){ b.addEventListener('click', function(){ pg=idx; renderR(); window.scrollTo(0,0); }); })(i);
+    p.appendChild(b);
+  }
+}
+
+/* ---- EDIT / DELETE ---- */
+function editR(id){
+  var r = allR.filter(function(x){ return x.id == id; })[0]; if(!r) return;
+  switchTab('form'); editId = id;
+  el('fd').value = r.date || '';
+  var ps = (r.periods||'').split('、');
+  qsa('#pchips .chip').forEach(function(c){ c.classList.toggle('on', ps.indexOf(c.dataset.v) >= 0); });
+  qsa('.rbtn').forEach(function(b){ b.classList.toggle('on', b.dataset.r === r.recorder); });
+  qsa('.cbi').forEach(function(b){ b.classList.remove('on'); });
+  var locs = (r.locations||'').split('、');
+  qsa('.cbi').forEach(function(b){ if(locs.indexOf(b.dataset.v) >= 0) b.classList.add('on'); });
+  setSt('stt', r.teacherStatus); setSt('sts', r.studentStatus);
+  setSt('ste', r.envStatus);     setSt('stg', r.overallStatus);
+  el('fnote').value = r.note||''; el('fresp').value = r.teacherResponse||'';
+  el('bsubmit').textContent = '🔄 更新紀錄'; el('bsubmit').className = 'btn btnpurple';
+  el('bcancel').style.display = '';
+  el('fbadge').textContent = '編輯紀錄'; el('fbadge').className = 'badge bgp';
+  window.scrollTo(0,0);
+}
+
+function delR(id){
+  if(!confirm('確認要刪除這筆紀錄？此操作無法復原。')) return;
+  gasR('deleteRecord', {id:id}).then(function(r){
+    if(r.success){ showToast('✅ 刪除成功','success'); loadRecords(); }
+    else showToast('刪除失敗','error');
+  }).catch(function(){ showToast('連線失敗','error'); });
+}
+
+/* ---- SIGN ---- */
+function loadSignR(){
+  if(!CU || !CU.canSign) return;
+  var listEl = el('slist');
+  el('sbadge').textContent = CU.label;
+  listEl.innerHTML = '<div class="empty"><div class="ei">⏳</div><p>載入中...</p></div>';
+  gasR('getRecords',{}).then(function(r){
+    var recs = r.success ? (r.data||[]) : [];
+    if(!recs.length){ listEl.innerHTML = '<div class="empty"><div class="ei">📭</div><p>暫無紀錄</p></div>'; return; }
+    listEl.innerHTML = '';
+    recs.slice(0,30).forEach(function(rec){
+      var f = CU.key === 'principal' ? 'principalSigned' : 'academicSigned';
+      var sg = !!rec[f];
+      var item = document.createElement('div'); item.className = 'signitem';
+      var info = document.createElement('div');
+      var nm = document.createElement('div'); nm.className = 'sname'; nm.textContent = rec.date + ' ' + rec.periods;
+      var sub = document.createElement('div'); sub.className = 'ssub'; sub.textContent = rec.recorder + ' · ' + rec.locations;
+      var st = document.createElement('div'); st.className = 'sstat' + (sg?' done':'');
+      st.textContent = sg ? '✅ 已簽章：' + rec[f] : '⏳ 待簽章';
+      info.appendChild(nm); info.appendChild(sub); info.appendChild(st);
+      var btn = document.createElement('button'); btn.className = 'btnsign';
+      btn.textContent = sg ? '已簽章' : '確認簽章';
+      if(sg) btn.disabled = true;
+      (function(rid, field, stEl, signBtn){
+        signBtn.addEventListener('click', function(){
+          signBtn.disabled = true; signBtn.textContent = '簽章中...';
+          var now = new Date().toLocaleString('zh-TW', {timeZone:'Asia/Taipei'});
+          var val = CU.label + ' ' + now;
+          gasR('updateRecord', (function(){ var o={id:rid}; o[field]=val; return o; })()).then(function(res){
+            if(res.success){
+              showToast('✅ 簽章完成','success');
+              signBtn.textContent = '已簽章';
+              stEl.textContent = '✅ 已簽章：' + val; stEl.classList.add('done');
+            } else { signBtn.disabled=false; signBtn.textContent='確認簽章'; showToast('簽章失敗','error'); }
+          }).catch(function(){ signBtn.disabled=false; signBtn.textContent='確認簽章'; showToast('連線失敗','error'); });
+        });
+      })(rec.id, f, st, btn);
+      item.appendChild(info); item.appendChild(btn); listEl.appendChild(item);
+    });
+  }).catch(function(){ listEl.innerHTML = '<div class="empty"><div class="ei">❌</div><p>載入失敗</p></div>'; });
+}
+
+/* ---- ADMIN ---- */
+function renderAdmin(){ renderPwList(); renderPmgr(); renderAmgr(); renderClassSettings(); renderStatusOptMgrs(); }
+
+function renderPwList(){
+  var el2 = el('pwlist'); el2.innerHTML = '';
+  [{k:'admin',l:'超級管理員'},{k:'principal',l:'校長'},{k:'academic',l:'教務主任'},
+   {k:'student',l:'學務主任'},{k:'general',l:'總務主任'},{k:'guidance',l:'輔導主任'}]
+  .forEach(function(r){
+    var div = document.createElement('div'); div.className = 'pwitem';
+    var nm = document.createElement('span'); nm.className = 'pwname'; nm.textContent = r.l;
+    var inp = document.createElement('input'); inp.type = 'password'; inp.id = 'pw-' + r.k; inp.value = CFG.passwords[r.k];
+    var eye = document.createElement('button'); eye.className = 'eyebtn';
+    eye.style.cssText = 'position:relative;right:auto;transform:none;color:var(--muted)';
+    eye.textContent = '👁';
+    eye.addEventListener('click', function(){ inp.type = inp.type==='password'?'text':'password'; eye.textContent = inp.type==='text'?'🙈':'👁'; });
+    var save = document.createElement('button'); save.className = 'btnspw'; save.textContent = '儲存';
+    save.addEventListener('click', function(){ savePw(r.k); });
+    div.appendChild(nm); div.appendChild(inp); div.appendChild(eye); div.appendChild(save);
+    el2.appendChild(div);
+  });
+}
+
+function renderPmgr(){
+  var el2 = el('pmgr'); el2.innerHTML = '';
+  CFG.periods.forEach(function(p, i){
+    var t = document.createElement('div'); t.className = 'etag';
+    t.appendChild(document.createTextNode(p + ' '));
+    var btn = document.createElement('button'); btn.textContent = '✕';
+    btn.addEventListener('click', function(){ CFG.periods.splice(i,1); renderPmgr(); renderPchips(); saveCFG(); });
+    t.appendChild(btn); el2.appendChild(t);
+  });
+}
+
+function renderAmgr(){
+  var el2 = el('amgr'); el2.innerHTML = '';
+  CFG.areas.forEach(function(a, i){
+    var t = document.createElement('div'); t.className = 'etag';
+    t.appendChild(document.createTextNode(a + ' '));
+    var btn = document.createElement('button'); btn.textContent = '✕';
+    btn.addEventListener('click', function(){ CFG.areas.splice(i,1); renderAmgr(); renderLocGrids(); saveCFG(); });
+    t.appendChild(btn); el2.appendChild(t);
+  });
+}
+
+/* ---- CLASS SETTINGS ---- */
+function renderClassSettings(){
+  el('cfg-grades').value = CFG.grades;
+  el('cfg-classes').value = CFG.classesPerGrade;
+  el('cfg-grade-prefix').value = CFG.gradePrefix || '';
+  el('cfg-class-suffix').value = CFG.classSuffix !== undefined ? CFG.classSuffix : '班';
+  updateClassPreview();
+}
+
+function updateClassPreview(){
+  var g = parseInt(el('cfg-grades').value) || 6;
+  var c = parseInt(el('cfg-classes').value) || 8;
+  var pre = el('cfg-grade-prefix').value;
+  var suf = el('cfg-class-suffix').value;
+  var samples = [pre+'1年1'+suf, pre+'1年2'+suf, '...', pre+g+'年'+c+suf];
+  el('class-preview').textContent = samples.join('、');
+}
+
+['cfg-grades','cfg-classes','cfg-grade-prefix','cfg-class-suffix'].forEach(function(id){
+  el(id).addEventListener('input', updateClassPreview);
+});
+
+el('btn-save-class').addEventListener('click', function(){
+  CFG.grades = parseInt(el('cfg-grades').value) || 6;
+  CFG.classesPerGrade = parseInt(el('cfg-classes').value) || 8;
+  CFG.gradePrefix = el('cfg-grade-prefix').value;
+  CFG.classSuffix = el('cfg-class-suffix').value;
+  renderLocGrids();
+  saveCFG().then(function(){ showToast('✅ 班級設定已儲存','success'); });
+});
+
+/* ---- STATUS OPTION MANAGERS ---- */
+var STATUS_OPT_DEFS = [
+  {key:'teacher', mgrId:'opt-teacher-mgr', newId:'new-opt-teacher', btnId:'btn-add-opt-teacher', formId:'stt'},
+  {key:'student', mgrId:'opt-student-mgr', newId:'new-opt-student', btnId:'btn-add-opt-student', formId:'sts'},
+  {key:'env',     mgrId:'opt-env-mgr',     newId:'new-opt-env',     btnId:'btn-add-opt-env',     formId:'ste'},
+  {key:'overall', mgrId:'opt-overall-mgr', newId:'new-opt-overall', btnId:'btn-add-opt-overall', formId:'stg'}
+];
+
+function renderStatusOptMgrs(){
+  STATUS_OPT_DEFS.forEach(function(def){
+    renderOneOptMgr(def);
+  });
+}
+
+function renderOneOptMgr(def){
+  var el2 = el(def.mgrId); el2.innerHTML = '';
+  var opts = (CFG.statusOpts && CFG.statusOpts[def.key]) ? CFG.statusOpts[def.key] : [];
+  opts.forEach(function(opt, i){
+    var t = document.createElement('div'); t.className = 'etag';
+    t.appendChild(document.createTextNode(opt + ' '));
+    var btn = document.createElement('button'); btn.textContent = '✕';
+    (function(idx, d){
+      btn.addEventListener('click', function(){
+        CFG.statusOpts[d.key].splice(idx, 1);
+        renderOneOptMgr(d);
+        renderStatusTags();
+        saveCFG();
+      });
+    })(i, def);
+    t.appendChild(btn); el2.appendChild(t);
+  });
+}
+
+STATUS_OPT_DEFS.forEach(function(def){
+  el(def.btnId).addEventListener('click', function(){
+    var v = el(def.newId).value.trim(); if(!v) return;
+    if(!CFG.statusOpts) CFG.statusOpts = {};
+    if(!CFG.statusOpts[def.key]) CFG.statusOpts[def.key] = [];
+    CFG.statusOpts[def.key].push(v);
+    el(def.newId).value = '';
+    renderOneOptMgr(def);
+    renderStatusTags();
+    saveCFG();
+    showToast('✅ 選項已新增','success');
+  });
+  el(def.newId).addEventListener('keyup', function(e){
+    if(e.key === 'Enter') el(def.btnId).click();
+  });
+});
+
+/* ---- ADMIN TABLE ---- */
+function renderAdminTable(){
+  var tb = el('atbody'); tb.innerHTML = '';
+  allR.forEach(function(r){
+    var tr = document.createElement('tr');
+    var vals = [r.date||'', r.periods||'', r.recorder||'', r.locations||'',
+                r.teacherStatus||'', r.studentStatus||'', r.envStatus||'', r.overallStatus||'', r.note||''];
+    vals.forEach(function(v, i){
+      var td = document.createElement('td');
+      if(i === 3 || i === 8){ td.style.cssText='max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'; td.title = v; }
+      td.textContent = v;
+      tr.appendChild(td);
+    });
+    var atd = document.createElement('td');
+    var ae = document.createElement('button'); ae.className = 'bte'; ae.textContent = '編輯';
+    var ad = document.createElement('button'); ad.className = 'btd'; ad.textContent = '刪除';
+    ae.addEventListener('click', function(){ editR(r.id); });
+    ad.addEventListener('click', function(){ delR(r.id); });
+    var w = document.createElement('div'); w.className = 'tacts';
+    w.appendChild(ae); w.appendChild(ad); atd.appendChild(w); tr.appendChild(atd);
+    tb.appendChild(tr);
+  });
+}
+
+el('btnaddp').addEventListener('click', function(){
+  var v = el('newp').value.trim(); if(!v) return;
+  CFG.periods.push(v); el('newp').value = '';
+  renderPmgr(); renderPchips(); saveCFG();
+});
+el('btnadda').addEventListener('click', function(){
+  var v = el('newa').value.trim(); if(!v) return;
+  CFG.areas.push(v); el('newa').value = '';
+  renderAmgr(); renderLocGrids(); saveCFG();
+});
+el('btnrefresh2').addEventListener('click', loadRecords);
+
+function savePw(key){
+  var v = document.getElementById('pw-' + key).value.trim();
+  if(!v || v.length < 4){ showToast('密碼至少4位','error'); return; }
+  CFG.passwords[key] = v;
+  saveCFG().then(function(){ showToast('✅ 密碼已更新','success'); });
+}
+
+function saveCFG(){
+  return gasR('saveConfig', {config: JSON.stringify(CFG)}).catch(function(){});
+}
+function loadCFG(){
+  return gasR('getConfig', {}).then(function(r){
+    if(r.success && r.data){
+      var remote = JSON.parse(r.data);
+      CFG = Object.assign(CFG, remote);
+      if(remote.statusOpts) CFG.statusOpts = remote.statusOpts;
+    }
+  }).catch(function(){});
+}
+
+/* ---- EXPORT ---- */
+el('btncsv').addEventListener('click', function(){
+  if(!allR.length){ showToast('無資料可匯出','info'); return; }
+  var hd = ['日期','節次','記錄者','場域班級','教師狀況','學生狀況','環境設施','整體狀況','備註','教師回應','校長簽章','教務主任簽章'];
+  var rows = allR.map(function(r){
+    return [r.date,r.periods,r.recorder,r.locations,r.teacherStatus,r.studentStatus,r.envStatus,r.overallStatus,r.note,r.teacherResponse,r.principalSigned,r.academicSigned]
+      .map(function(v){ return '"' + (v||'').replace(/"/g,'""') + '"'; }).join(',');
+  });
+  var csv = '\uFEFF' + [hd.join(',')].concat(rows).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download = '巡堂紀錄_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  showToast('✅ CSV 匯出成功','success');
+});
+
+el('btnprt').addEventListener('click', function(){
+  var w = window.open('','_blank');
+  var rows = allR.map(function(r){
+    return '<tr><td>' + [r.date,r.periods,r.recorder,r.locations,
+      r.teacherStatus||'',r.studentStatus||'',r.envStatus||'',r.overallStatus||'',
+      r.note||'',(r.principalSigned||'未簽'),(r.academicSigned||'未簽')].join('</td><td>') + '</td></tr>';
+  }).join('');
+  w.document.write('<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>興嘉國小巡堂紀錄</title><style>body{font-family:sans-serif;font-size:11px;padding:20px}h1{font-size:16px;margin-bottom:4px}p{font-size:10px;color:#666;margin-bottom:14px}table{width:100%;border-collapse:collapse}th{background:#16213e;color:#fff;padding:6px 8px;font-size:10px;text-align:left}td{padding:5px 8px;border-bottom:1px solid #ddd}tr:nth-child(even)td{background:#f9f7f2}@media print{@page{size:A4 landscape;margin:10mm}}</style></head><body><h1>興嘉國小巡堂紀錄</h1><p>列印時間：' + new Date().toLocaleString('zh-TW') + '</p><table><thead><tr><th>日期</th><th>節次</th><th>記錄者</th><th>場域班級</th><th>教師</th><th>學生</th><th>環境</th><th>整體</th><th>備註</th><th>校長簽章</th><th>教務簽章</th></tr></thead><tbody>' + rows + '</tbody></table></body></html>');
+  w.document.close();
+  w.onload = function(){ w.print(); };
+});
+
+/* ---- GAS API ---- */
+function gasR(action, params){
+  if(!GAS_URL || GAS_URL === 'YOUR_GAS_WEB_APP_URL_HERE'){
+    return Promise.resolve(demo(action, params));
+  }
+  return fetch(GAS_URL + '?action=' + action, {
+    method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(params)
+  }).then(function(res){ return res.json(); });
+}
+
+var _dr = [], _di = 1;
+function demo(a, p){
+  if(a === 'addRecord'){ _dr.unshift(Object.assign({}, p, {id:String(_di++),principalSigned:'',academicSigned:''})); return {success:true}; }
+  if(a === 'getRecords') return {success:true, data:_dr.slice()};
+  if(a === 'deleteRecord'){ _dr = _dr.filter(function(r){ return r.id != p.id; }); return {success:true}; }
+  if(a === 'updateRecord'){ var idx=_dr.findIndex(function(r){ return r.id==p.id; }); if(idx>=0) _dr[idx]=Object.assign({},_dr[idx],p); return {success:true}; }
+  return {success:true};
+}
+
+/* ---- INIT ---- */
+el('fd').value = new Date().toISOString().split('T')[0];
+
+})();
+</script>
+</body>
+</html>
