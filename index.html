@@ -1298,18 +1298,30 @@ function savePw(key){
   var v = document.getElementById('pw-' + key).value.trim();
   if(!v || v.length < 4){ showToast('密碼至少4位','error'); return; }
   CFG.passwords[key] = v;
-  saveCFG().then(function(){ showToast('✅ 密碼已更新','success'); });
+  saveCFG().then(function(r){
+    if(r && r.success){
+      showToast('✅ 密碼已儲存至試算表','success');
+    } else {
+      showToast('⚠️ 已更新本機，但試算表未連線','info');
+    }
+  }).catch(function(){
+    showToast('⚠️ 已更新本機，但試算表未連線','info');
+  });
 }
 
 function saveCFG(){
-  return gasR('saveConfig', {config: JSON.stringify(CFG)}).catch(function(){});
+  return gasR('saveConfig', {config: JSON.stringify(CFG)}).catch(function(e){
+    return {success: false, message: e ? e.toString() : 'error'};
+  });
 }
 function loadCFG(){
   return gasR('getConfig', {}).then(function(r){
     if(r.success && r.data){
       var remote = JSON.parse(r.data);
-      CFG = Object.assign(CFG, remote);
-      if(remote.statusOpts) CFG.statusOpts = remote.statusOpts;
+      // 深層合併，確保 passwords 完整覆蓋
+      CFG = Object.assign({}, CFG, remote);
+      if(remote.passwords) CFG.passwords = Object.assign({}, CFG.passwords, remote.passwords);
+      if(remote.statusOpts) CFG.statusOpts = Object.assign({}, CFG.statusOpts, remote.statusOpts);
     }
   }).catch(function(){});
 }
@@ -1363,6 +1375,12 @@ function demo(a, p){
 
 /* ---- INIT ---- */
 el('fd').value = new Date().toISOString().split('T')[0];
+
+// 頁面載入時先從試算表讀取設定（包含修改後的密碼）
+loadCFG().then(function(){
+  // 若登入畫面仍顯示中，確保使用最新密碼
+  el('lpw').value = '';
+});
 
 })();
 </script>
